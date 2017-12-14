@@ -1,0 +1,51 @@
+<?php
+try{
+	$response = $dbh->query('SELECT * FROM tbl_users');
+}catch(PDOException $e){
+	echo "Erreur:".$e->getMessage()."<br />";
+}
+?>
+<div class="container theme-showcase" role="main">
+    <br>
+    <div class="page-header">
+        <h1>Utilisateurs</h1>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nom</th>
+                        <th>Prenom</th>
+        <th>E-mail</th>
+                        <th colspan="2"></th>
+                    </tr>
+                </thead>
+                <tbody>
+<?php
+while( $donnee=$response->fetch()){
+    echo"
+                    <tr>
+                        <td>".$donnee['id']."</td>
+                        <td>".$donnee['nom']."</td>
+                        <td>".$donnee['prenom']."</td>
+        <td>".$donnee['email']."</td>
+                        <td><a class=\"btn btn-warning btn-xs\" href=\"index.php?page=admin&q=tasks&id=".$donnee['id']."\">Taches</a></td>
+        <td><a class=\"btn btn-info btn-xs\" href=\"index.php?page=useredit&id=".$donnee['id']."\">Editer / Supprimer</a></td>
+                    </tr>
+    ";
+}
+$response->closeCursor();
+?>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-6">
+<?php 
+include_once "get_tasks.php";
+if(!empty($user_id)&&!empty($q))echo "<a href=\"index.php?page=addtasks&id=".$user_id."\" class=\"btn btn-info\">Ajouter une tache</a>"; 
+?>
+        </div>
+    </div>
+</div>
